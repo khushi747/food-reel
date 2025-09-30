@@ -1,12 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-// Reusable feed for vertical reels
-// Props:
-// - items: Array of video items { _id, video, description, likeCount, savesCount, commentsCount, comments, foodPartner }
-// - onLike: (item) => void | Promise<void>
-// - onSave: (item) => void | Promise<void>
-// - emptyMessage: string
 const ReelFeed = ({
   items = [],
   onLike,
@@ -22,9 +16,7 @@ const ReelFeed = ({
           const video = entry.target;
           if (!(video instanceof HTMLVideoElement)) return;
           if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-            video.play().catch(() => {
-              /* ignore autoplay errors */
-            });
+            video.play().catch(() => {});
           } else {
             video.pause();
           }
@@ -53,8 +45,7 @@ const ReelFeed = ({
             <p>{emptyMessage}</p>
           </div>
         )}
-
-        {items.map((item) => (
+         {items.map((item) => (
           <section key={item._id} className="reel" role="listitem">
             <video
               ref={setVideoRef(item._id)}
@@ -140,13 +131,16 @@ const ReelFeed = ({
               </div>
 
               <div className="reel-content">
+                <p className="reel-name" title={item.name}>
+                  {item.name}
+                </p>
                 <p className="reel-description" title={item.description}>
                   {item.description}
                 </p>
                 {item.foodPartner && (
                   <Link
                     className="reel-btn"
-                    to={"/food-partner/" + item.foodPartner}
+                    to={"food-partner-profile/" + item.foodPartner}
                     aria-label="Visit store"
                   >
                     Visit store

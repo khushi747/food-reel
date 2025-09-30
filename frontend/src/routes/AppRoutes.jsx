@@ -9,9 +9,13 @@ import Home from "../pages/general/Home";
 import Saved from "../pages/general/Saved";
 import BottomNav from "../components/BottomNav";
 import CreateFood from "../pages/food-partner/CreateFood";
-import Profile from "../pages/food-partner/Profile";
-
+import FoodPartnerProfile from "../pages/food-partner/FoodPartnerProfile";
+import UserProfile from "../pages/user/UserProfile";
+import { useUser } from "../shared/UserContext";
+import PrivateRoute from "./PrivateRoute";
 const AppRoutes = () => {
+  const { user } = useUser();
+
   return (
     <Router>
       <Routes>
@@ -26,23 +30,49 @@ const AppRoutes = () => {
         <Route
           path="/"
           element={
-            <>
-              <Home />
-              <BottomNav />
-            </>
+            <PrivateRoute>
+              <>
+                <Home />
+                <BottomNav profileId={user?._id} />
+              </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/saved"
           element={
-            <>
-              <Saved />
-              <BottomNav />
-            </>
+            <PrivateRoute>
+              <>
+                <Saved />
+                <BottomNav profileId={user?._id} />
+              </>
+            </PrivateRoute>
           }
         />
-        <Route path="/create-food" element={<CreateFood />} />
-        <Route path="/food-partner/:id" element={<Profile />} />
+        <Route
+          path="/create-food"
+          element={
+            <PrivateRoute>
+              <CreateFood />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/food-partner-profile/:id"
+          element={
+            <PrivateRoute>
+              <FoodPartnerProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/user-profile/:id"
+          element={
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

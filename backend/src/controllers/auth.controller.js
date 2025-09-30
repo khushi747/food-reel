@@ -39,6 +39,7 @@ async function registerUser(req, res) {
       _id: user._id,
       email: user.email,
       fullName: user.fullName,
+      role: user.role,
     },
   });
 }
@@ -79,6 +80,7 @@ async function loginUser(req, res) {
       _id: user._id,
       email: user.email,
       fullName: user.fullName,
+      role: user.role,
     },
   });
 }
@@ -87,6 +89,24 @@ function logoutUser(req, res) {
   res.clearCookie("token");
   res.status(200).json({
     message: "User logged out successfully",
+  });
+}
+
+async function getUserById(req, res) {
+  const userId = req.params.id;
+  const user = await userModel.findById(userId);
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+  res.status(200).json({
+    user: {
+      _id: user._id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+    },
   });
 }
 
@@ -125,13 +145,14 @@ async function registerFoodPartner(req, res) {
 
   res.status(201).json({
     message: "Food partner registered successfully",
-    foodPartner: {
+    user: {
       _id: foodPartner._id,
       email: foodPartner.email,
       name: foodPartner.name,
       address: foodPartner.address,
       contactName: foodPartner.contactName,
       phone: foodPartner.phone,
+      role: foodPartner.role,
     },
   });
 }
@@ -168,10 +189,11 @@ async function loginFoodPartner(req, res) {
 
   res.status(200).json({
     message: "Food partner logged in successfully",
-    foodPartner: {
+    user: {
       _id: foodPartner._id,
       email: foodPartner.email,
       name: foodPartner.name,
+      role: foodPartner.role,
     },
   });
 }
@@ -187,6 +209,7 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  getUserById,
   registerFoodPartner,
   loginFoodPartner,
   logoutFoodPartner,

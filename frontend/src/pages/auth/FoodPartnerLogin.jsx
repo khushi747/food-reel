@@ -2,9 +2,10 @@ import React from "react";
 import "../../styles/auth-shared.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { useUser } from "../../shared/UserContext";
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +22,10 @@ const FoodPartnerLogin = () => {
       { withCredentials: true }
     );
 
-    console.log(response.data);
+     const userData = response.data.user;
+    setUser(userData);
 
-    navigate("/create-food"); // Redirect to create food page after login
+    navigate("/create-food");
   };
 
   return (
